@@ -23,6 +23,8 @@ create table if not exists social_user (
 	last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'toor';
+
 -- drop table social_user;
 -- truncate table social_user;
 -- describe social_user;
