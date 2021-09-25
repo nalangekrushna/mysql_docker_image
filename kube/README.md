@@ -18,3 +18,20 @@ kubectl apply -f db-secrets-opaque.yaml
 
 // create db deployment
 kubectl apply -f db-deploy.yaml
+
+// create a service to access db from website
+kubectl apply -f db-clusterip-svc.yaml
+
+// need to resolve 1045 Plugin caching_sha2_password could not be loaded: issue from
+// code only for now just login and create user using quick fix provided below.
+
+FAQ
+1. 1045 Plugin caching_sha2_password could not be loaded
+kubectl exec -it db-deploy-558b46f485-4ddbh -n dev -- mysql -uroot -p 
+// enter password toor
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'toor';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+2. 1049 Unknown database 'website
+It means initialization script has not run.

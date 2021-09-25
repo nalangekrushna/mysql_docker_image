@@ -21,4 +21,5 @@ spec:
           operator: In
           values:
           - website-backend
+          - website-backend-m02
           - website-backend-m03

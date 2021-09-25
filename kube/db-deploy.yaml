@@ -21,30 +21,25 @@ spec:
         tier: db
     spec:
       containers:
-      - image: mysql/mysql-server:8.0
+      - image: mysql:8.0
         imagePullPolicy: IfNotPresent
         name : db
+        #command: mysqld --default-authentication-plugin=mysql_native_password
         env:
-          - name: MYSQL_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: db-auth
-                key: db_username
           - name: MYSQL_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: db-auth
-                key: db_password
+            value: toor
+          - name: default-auth
+            value: mysql_native_password
         ports:
         - containerPort: 3306
           name: mysql
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pvc
+      #   volumeMounts:
+      #   - name: mysql-persistent-storage
+      #     mountPath: /var/lib/mysql
+      # volumes:
+      # - name: mysql-persistent-storage
+      #   persistentVolumeClaim:
+      #     claimName: mysql-pvc
 # create secrets.yaml to store mysql username and password.
 # complete above spec using below link 
 # https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/#create-persistentvolumeclaims-and-persistentvolumes
