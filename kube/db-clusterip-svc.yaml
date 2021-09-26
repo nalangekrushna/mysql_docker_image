@@ -2,13 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    run: db-service
+    app: db-sts
+    tier: db
   name: db
   namespace: dev
 spec:
   ports:
     - port: 3306
+      name: mysql
   selector:
-    app: db-deploy
+    app: db-sts
     tier: db
   clusterIP: None

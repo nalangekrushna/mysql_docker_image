@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-sts
+  namespace: dev
+  labels:
+    app: db-sts
+    tier: db
+spec:
+  serviceName: db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-sts
+      tier: db
+  template:
+    metadata:
+      labels:
+        app: db-sts
+        tier: db
+    spec:
+      containers:
+      - name: db
+        image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-auth
+              key: db_password
+          # - name: MYSQL_ROOT_PASSWORD
+          #   value: toor
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        volumeMounts:
+        - name: db-init
+          mountPath: /docker-entrypoint-initdb.d
+        - name: db-pv
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db-init
+        configMap:
+          name: db-init-config
+      - name: db-pv
+        persistentVolumeClaim:
+          claimName: db-pvc
